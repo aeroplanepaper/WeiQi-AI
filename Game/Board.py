@@ -1,3 +1,4 @@
+
 from collections import namedtuple
 from Player import Color
 import ZobristHash
