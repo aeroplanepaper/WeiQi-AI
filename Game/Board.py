@@ -1,7 +1,7 @@
 
 from collections import namedtuple
 from Player import Color
-import ZobristHash
+
 
 
 class Point(namedtuple('Point', 'row, col')):
@@ -92,7 +92,7 @@ class Board(object):
         :param num_rows: Number of rows of the board.
         :param num_cols: Number of columns of the board.
         """
-
+        import ZobristHash
         self.num_rows = num_rows
         self.num_cols = num_cols
         "_grid: The status of current board, every stone functioned to its corresponding GoString"
@@ -136,6 +136,7 @@ class Board(object):
         This method remove the target GoString, and update the liberties of adjacent GoString.
         :param string: The String trying to remove
         """
+        import ZobristHash
         for removed_point in string.stones:
             for neighbor in removed_point.neighbors():
                 if self.is_on_grid(neighbor):
@@ -155,8 +156,8 @@ class Board(object):
         :param point: The target point to place the stone.
         """
         assert self.is_on_grid(point), "Point is not on the board!"
-        assert self._grid.get(point) is not None, "Stone already exist, illegal move!"
-
+        assert self._grid.get(point) is None, "Stone already exist, illegal move!"
+        import ZobristHash
         adjacent_same_color = []
         adjacent_opposite_color = []
         liberties = []

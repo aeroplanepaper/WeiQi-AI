@@ -1,5 +1,8 @@
 import enum
 
+class Player(enum.Enum):
+    AI = 1
+    HUMAN = 2
 
 class Color(enum.Enum):
     BLACK = 1

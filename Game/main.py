@@ -1,16 +1,22 @@
-# This is a sample Python script.
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
+from GUI import GUI
+from Board import  Board
+from agent.Agent import AI,Human
+import Player
+from GameState import GameState
+import pygame
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
+
+    game = GameState.new_game(19)
+
+    gui = GUI(game.board)
+    player1 = AI()
+    player2 = Human()
+    running = True
+    while running:
+        # if game.next_player == Player.Color.BLACK:
+
+
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
