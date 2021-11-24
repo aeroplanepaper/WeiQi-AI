@@ -37,12 +37,12 @@ class GameState(object):
     def apply_move(self, move: Move):
         if move.isPlay:
             try:
-                self.does_move_self_captured(self.next_player, move.point)
+                self.does_move_self_captured(self.next_player, move)
             except IllegalMoveError:
                 print("Self captured occurred! Please retry!")
                 return None
             try:
-                self.does_move_violate_ko(self.next_player, move.point)
+                self.does_move_violate_ko(self.next_player, move)
             except IllegalMoveError:
                 print("Ko fight occurred! Please retry!")
                 return None
@@ -74,7 +74,7 @@ class GameState(object):
         next_board = copy.deepcopy(self.board)
         next_board.place_stone(player, move.point)
         new_string = next_board.get_go_string(move.point)
-        if new_string.num_liberties() == 0:
+        if new_string.num_liberties == 0:
             raise IllegalMoveError
 
     def does_move_violate_ko(self, player, move):
@@ -82,6 +82,6 @@ class GameState(object):
             return
         next_board = copy.deepcopy(self.board)
         next_board.place_stone(player, move.point)
-        next_situation = (player.other, next_board.get_hash())
+        next_situation = (player.opposite, next_board.get_hash())
         if next_situation in self.previous_state:
             raise IllegalMoveError

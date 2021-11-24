@@ -1,9 +1,16 @@
+import pygame
+from Board import Point
 
-
-for event in pygame.event.get():
-    if event.type == pygame.QUIT:
-        running = False
-    elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-        x, y = event.pos()
-        row = round((y - 40) / 40)
-        col = round((x - 40) / 40)
+def place_stone_control():
+    print(pygame.event.get())
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return None
+            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                x, y = event.pos
+                row = round((x - 40) / 40 + 1)
+                col = round((y - 40) / 40 + 1)
+                return Point(row, col)
+            else:
+                pass
