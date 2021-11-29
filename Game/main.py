@@ -2,6 +2,7 @@ from GUI import GUI
 from Board import Board
 from Board import Point
 from Player import Player
+import copy
 from GameState import GameState
 from Move import Move
 import Control
@@ -26,8 +27,13 @@ if __name__ == '__main__':
                 pygame.quit()
             move = Move(point)
             print(point)
-            game = game.apply_move(move)
+            game_backUp = copy.deepcopy(game)
+            game_backUp = game_backUp.apply_move(move)
+            if game_backUp is None:
+                continue
+            game = game_backUp
             gui.update(game.board)
+            # current_player = current_player.next()
 
 
 

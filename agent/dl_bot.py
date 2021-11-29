@@ -40,8 +40,8 @@ class ConvNet(nn.Module):
         x = self.layer3(x)
         x = self.layer4(x)
         x = self.layer5(x)
+        x = x.view(1, -1)
         x = self.layer6(x)
         x = self.layer7(x)
         x = self.layer8(x)
         return F.log_softmax(x)
-
