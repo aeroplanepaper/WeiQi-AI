@@ -58,6 +58,7 @@ class GoString(object):
         """
         assert goString.color == self.color, "Wrong Merge, color not match"
         combined_stones = self.stones | goString.stones
+        # print(combined_stones)
         return GoString(
             self.color,
             combined_stones,
@@ -137,6 +138,7 @@ class Board(object):
         :param string: The String trying to remove
         """
         import ZobristHash
+        print(string.stones)
         for removed_point in string.stones:
             for neighbor in removed_point.neighbors():
                 if self.is_on_grid(neighbor):
@@ -177,15 +179,17 @@ class Board(object):
 
         new_string = GoString(playerColor, [point], liberties)
         for same_color_string in adjacent_same_color:
-            new_string.merge(same_color_string)
+            new_string = new_string.merge(same_color_string)
+            # print("merge")
         for new_string_point in new_string.stones:
             self._grid[new_string_point] = new_string
-            self._hash ^= ZobristHash.HASH_CODE[point, playerColor]
+        self._hash ^= ZobristHash.HASH_CODE[point, playerColor]
 
         for opposite_color_string in adjacent_opposite_color:
             replacement_string = opposite_color_string.remove_liberty(point)
             if replacement_string.num_liberties == 0:
                 self._remove_string(opposite_color_string)
+                # print('remove')
             else:
                 self._replace_string(replacement_string)
 

@@ -8,7 +8,7 @@ from Move import Move
 import Control
 import pygame
 
-# Press the green button in the gutter to run the script.
+
 if __name__ == '__main__':
 
     game = GameState.new_game(19)
@@ -32,10 +32,9 @@ if __name__ == '__main__':
             if game_backUp is None:
                 continue
             game = game_backUp
+            # print(game.board.get_go_string(point).stones)
             gui.update(game.board)
             # current_player = current_player.next()
 
 
 
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
