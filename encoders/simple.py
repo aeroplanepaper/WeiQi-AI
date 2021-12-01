@@ -1,8 +1,9 @@
 import numpy as np
 
-from dlgo.encoders.base import Encoder
-from dlgo.goboard import Move
-from dlgo.gotypes import Player, Point
+from encoders.base import Encoder
+from Game.Move import Move
+from Game.Board import Point
+from Game.Player import Color
 
 
 class SimpleEncoder(Encoder):
@@ -24,7 +25,7 @@ class SimpleEncoder(Encoder):
 
     def encode(self, game_state):
         board_tensor = np.zeros(self.shape())
-        if game_state.next_player == Player.black:
+        if game_state.next_player == Color.BLACK:
             board_tensor[8] = 1
         else:
             board_tensor[9] = 1
@@ -39,7 +40,7 @@ class SimpleEncoder(Encoder):
                         board_tensor[10][r][c] = 1
                 else:
                     liberty_plane = min(4, go_string.num_liberties) - 1
-                    if go_string.color == Player.white:
+                    if go_string.color == Color.WHITE:
                         liberty_plane += 4
                     board_tensor[liberty_plane][r][c] = 1
 

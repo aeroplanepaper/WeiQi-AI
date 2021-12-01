@@ -1,7 +1,7 @@
-from Board import Board
-from Move import Move
-from Player import Color
-import ZobristHash
+from Game.Board import Board
+from Game.Move import Move
+from Game.Player import Color
+import Game.ZobristHash
 
 import copy
 

@@ -1,6 +1,6 @@
 
 from collections import namedtuple
-from Player import Color
+from Game.Player import Color
 
 
 
@@ -93,12 +93,12 @@ class Board(object):
         :param num_rows: Number of rows of the board.
         :param num_cols: Number of columns of the board.
         """
-        import ZobristHash
+        import Game.ZobristHash
         self.num_rows = num_rows
         self.num_cols = num_cols
         "_grid: The status of current board, every stone functioned to its corresponding GoString"
         self._grid = {}
-        self._hash = ZobristHash.EMPTY_BOARD
+        self._hash = Game.ZobristHash.EMPTY_BOARD
 
     def is_on_grid(self, point: Point) -> bool:
         """
@@ -137,8 +137,8 @@ class Board(object):
         This method remove the target GoString, and update the liberties of adjacent GoString.
         :param string: The String trying to remove
         """
-        import ZobristHash
-        print(string.stones)
+        import Game.ZobristHash
+        # print(string.stones)
         for removed_point in string.stones:
             for neighbor in removed_point.neighbors():
                 if self.is_on_grid(neighbor):
@@ -148,7 +148,7 @@ class Board(object):
                     if adjacent_string is not string:
                         self._replace_string(adjacent_string.add_liberty(removed_point))
             self._grid[removed_point] = None
-            self._hash ^= ZobristHash.HASH_CODE[removed_point, string.color]
+            self._hash ^= Game.ZobristHash.HASH_CODE[removed_point, string.color]
 
     def place_stone(self, playerColor: Color, point: Point):
         """
@@ -159,7 +159,7 @@ class Board(object):
         """
         assert self.is_on_grid(point), "Point is not on the board!"
         assert self._grid.get(point) is None, "Stone already exist, illegal move!"
-        import ZobristHash
+        import Game.ZobristHash
         adjacent_same_color = []
         adjacent_opposite_color = []
         liberties = []
@@ -183,7 +183,7 @@ class Board(object):
             # print("merge")
         for new_string_point in new_string.stones:
             self._grid[new_string_point] = new_string
-        self._hash ^= ZobristHash.HASH_CODE[point, playerColor]
+        self._hash ^= Game.ZobristHash.HASH_CODE[point, playerColor]
 
         for opposite_color_string in adjacent_opposite_color:
             replacement_string = opposite_color_string.remove_liberty(point)

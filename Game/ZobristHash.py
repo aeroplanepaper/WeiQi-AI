@@ -1,5 +1,5 @@
-from Player import Color
-from Board import Point
+from Game.Player import Color
+from Game.Board import Point
 
 __all__ = ['HASH_CODE', 'EMPTY_BOARD']
 
