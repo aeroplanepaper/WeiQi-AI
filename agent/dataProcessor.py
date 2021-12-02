@@ -14,12 +14,13 @@ class TrainDataSet(Dataset):
     def __init__(self, data_path, batch_size):
         self.data_path = data_path
         self.batch = batch_size
-        self.encoder = get_encoder_by_name("simple", 19)
+        self.encoder = get_encoder_by_name("oneplane", 19)
 
         shape = self.encoder.shape()
         self.data = np.zeros(np.insert(shape, 0, np.asarray([0])))
         self.labels = np.zeros(0)
         self.index = 0
+        self.percent = 0
 
 
     def __len__(self):
@@ -31,10 +32,16 @@ class TrainDataSet(Dataset):
 
         sample = self.data[0]
         label = self.labels[0]
+        self.data = np.delete(self.data, 0, 0)
+        self.labels = np.delete(self.labels, 0, 0)
         return sample, label
 
     def get_data(self):
         file_path = self.data_path[self.index]
+        temp = int(100*(self.index + 1)/self.__len__())
+        if self.percent - temp != 0:
+            self.percent = temp
+            print(self.percent)
         self.index += 1
         if not file_path.endswith(".sgf"):
             raise ValueError(file_path + "is not sgf file!")
@@ -43,9 +50,9 @@ class TrainDataSet(Dataset):
         game_state, first_move_done = get_handicap(sgf)
         shape = self.encoder.shape()
         total_move = num_total_moves(sgf)
-        print(total_move)
+        # print(total_move)
         feature_shape = np.insert(shape, 0, np.asarray([total_move]))
-        print(feature_shape)
+        # print(feature_shape)
         features = np.zeros(feature_shape)
         labels = np.zeros(total_move)
         cnt = 0
@@ -73,7 +80,7 @@ class TestDataset(Dataset):
     def __init__(self, data_path, batch_size):
         self.data_path = data_path
         self.batch = batch_size
-        self.encoder = get_encoder_by_name("simple", 19)
+        self.encoder = get_encoder_by_name("oneplane", 19)
 
         shape = self.encoder.shape()
         self.data = np.zeros(np.insert(shape, 0, np.asarray([0])))
@@ -90,6 +97,8 @@ class TestDataset(Dataset):
 
         sample = self.data[0]
         label = self.labels[0]
+        self.data = np.delete(self.data, 0, 0)
+        self.labels = np.delete(self.labels, 0, 0)
         return sample, label
 
     def get_data(self):
@@ -102,9 +111,9 @@ class TestDataset(Dataset):
         game_state, first_move_done = get_handicap(sgf)
         shape = self.encoder.shape()
         total_move = num_total_moves(sgf)
-        print(total_move)
+        # print(total_move)
         feature_shape = np.insert(shape, 0, np.asarray([total_move]))
-        print(feature_shape)
+        # print(feature_shape)
         features = np.zeros(feature_shape)
         labels = np.zeros(total_move)
         cnt = 0
