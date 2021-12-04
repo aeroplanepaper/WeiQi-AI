@@ -7,7 +7,7 @@ class Encoder:
     """
     transform game state into a numpy array
     """
-    def encode(self, game_state):
+    def encode(self, board, player):
         raise NotImplementedError()
 
     """

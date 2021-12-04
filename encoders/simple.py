@@ -18,26 +18,27 @@ class SimpleEncoder(Encoder):
         # 8. black plays next
         # 9. white plays next
         # 10. move would be illegal due to ko
-        self.num_planes = 11
+        self.num_planes = 10
 
     def name(self):
         return 'simple'
 
-    def encode(self, game_state):
+    def encode(self, board, color):
         board_tensor = np.zeros(self.shape())
-        if game_state.next_player == Color.BLACK:
+        if color == Color.BLACK:
             board_tensor[8] = 1
         else:
             board_tensor[9] = 1
         for r in range(self.board_height):
             for c in range(self.board_width):
                 p = Point(row=r + 1, col=c + 1)
-                go_string = game_state.board.get_go_string(p)
+                go_string = board.get_go_string(p)
 
                 if go_string is None:
-                    if game_state.does_move_violate_ko(game_state.next_player,
-                                                       Move.play(p)):
-                        board_tensor[10][r][c] = 1
+                    continue
+                    # if game_state.does_move_violate_ko(game_state.next_player,
+                    #                                    Move.play(p)):
+                    #     board_tensor[10][r][c] = 1
                 else:
                     liberty_plane = min(4, go_string.num_liberties) - 1
                     if go_string.color == Color.WHITE:

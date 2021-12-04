@@ -6,7 +6,7 @@ import torch
 import torch.nn as nn
 import torch.functional as F
 from torch.utils.data import DataLoader
-from agent.dl_bot import ConvNet2D
+from agent.dl_bot import ConvNet2D, ConvNet2DForSimple
 from agent.dataProcessor import TrainDataSet, TestDataset
 
 
@@ -40,7 +40,7 @@ if __name__ == '__main__':
     parser.add_argument("--lr", type=float, default=0.001)
     parser.add_argument("--optimizer", type=str, default="Adam")
     parser.add_argument("--nepochs", type=int, default=5)
-    parser.add_argument("--batch-size", type=int, default=1024)
+    parser.add_argument("--batch-size", type=int, default=512)
     parser.add_argument("--use-gpu", action="store_true", default=True)
     parser.add_argument("--save-model", type=str, default="")
     parser.add_argument("--test-freq", type=int, default=2048)
@@ -54,8 +54,8 @@ if __name__ == '__main__':
     else:
         device = torch.device("cpu")
 
-    model = ConvNet2D()
-
+    # model = ConvNet2D()
+    model = ConvNet2DForSimple()
     if use_gpu:
         model.to(device)
 
@@ -69,6 +69,7 @@ if __name__ == '__main__':
         "ASGD" : torch.optim.ASGD
     }
     optimizer = opts[args.optimizer](params=model.parameters(), lr= args.lr, betas=(0.9, 0.999), eps=1e-08, weight_decay=0)
+    # optimizer = opts[args.optimizer](params=model.parameters(), lr= args.lr)
     criterion = nn.CrossEntropyLoss()
     Losses = []
     Acc = []
@@ -88,8 +89,8 @@ if __name__ == '__main__':
 
     trainDataSet = TrainDataSet(data_path=train_data_path, batch_size=args.batch_size)
     testDataSet = TestDataset(data_path=test_data_path, batch_size=args.batch_size)
-    trainDataLoader = DataLoader(trainDataSet, batch_size=args.batch_size)
-    testDataLoader = DataLoader(testDataSet, batch_size=args.batch_size)
+    trainDataLoader = DataLoader(trainDataSet, batch_size=args.batch_size, num_workers=0)
+    testDataLoader = DataLoader(testDataSet, batch_size=args.batch_size, num_workers=0)
 
     iteration = 0
     num_of_data = 0
@@ -127,6 +128,6 @@ if __name__ == '__main__':
             loss.backward()
             optimizer.step()
             if iteration % args.print_freq == 0 and iteration != 0:
-                print(iteration, ' ', loss.item(),' ', acc)
+                print(epoch,' ' ,iteration, ' ', loss.item(),' ', acc)
                 # print("At iteration {:} , loss: {:%4f} , ".format(iteration, loss.item()))
             iteration += 1

@@ -1,6 +1,7 @@
 import numpy as np
 from encoders.base import Encoder
 from Game.Board import Point
+from numba import jit
 
 class OnePlaneEncoder(Encoder):
     def __init__(self, board_size):
@@ -15,16 +16,16 @@ class OnePlaneEncoder(Encoder):
     if color of point != next player, matrix_index = -1
     else matrix index = 0
     """
-    def encode(self, game_state):
+    def encode(self, board, player):
         board_matrix = np.zeros(self.shape())
-        next_player = game_state.next_player
+        # next_player = game_state.next_player
         for r in range(self.board_height):
             for c in range(self.board_width):
                 p = Point(row=r + 1, col=c + 1)
-                go_string = game_state.board.get_go_string(p)
-                if go_string is None:
+                color = board.get_stone(p)
+                if color is None:
                     continue
-                if go_string.color == next_player:
+                if color == player:
                     board_matrix[0, r, c] = 1
                 else:
                     board_matrix[0, r, c] = -1

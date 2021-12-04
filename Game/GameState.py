@@ -46,7 +46,7 @@ class GameState(object):
             except IllegalMoveError:
                 print("Ko fight occurred! Please retry!")
                 return None
-            next_board = copy.deepcopy(self.board)
+            next_board = self.board
             next_board.place_stone(self.next_player, move.point)
         else:
             next_board = self.board
